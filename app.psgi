@@ -2,9 +2,8 @@
 use strict;
 use warnings;
 use utf8;
-use File::Spec;
-use File::Basename;
-use lib File::Spec->catdir(dirname(__FILE__), '../lib');
+use FindBin;
+use lib "$FindBin::Bin/lib";
 use Plack::Builder;
 
 use MyApp::Web;
@@ -12,17 +11,22 @@ use MyApp;
 use URI::Escape;
 use File::Path ();
 
+use MyApp::Web::ViewYATT;
+
 my $app = builder {
     enable 'Plack::Middleware::Static',
         path => qr{^(?:/static/)},
-        root => File::Spec->catdir(dirname(__FILE__), '..');
+        root => $FindBin::Bin;
     enable 'Plack::Middleware::Static',
         path => qr{^(?:/robots\.txt|/favicon\.ico)$},
-        root => File::Spec->catdir(dirname(__FILE__), '..', 'static');
+        root => "$FindBin::Bin/static";
     enable 'Plack::Middleware::ReverseProxy';
 
     MyApp::Web->to_app();
 };
+
+return MyApp::Web->create_view if MyApp::Web::ViewYATT->want_object;
+
 unless (caller) {
     my $port        = 5000;
     my $host        = '127.0.0.1';
