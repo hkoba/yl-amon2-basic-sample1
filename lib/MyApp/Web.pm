@@ -19,10 +19,10 @@ __PACKAGE__->load_plugins(
 );
 
 # setup view
-use MyApp::Web::View;
+use MyApp::Web::ViewYATT;
 {
     sub create_view {
-        my $view = MyApp::Web::View->make_instance(__PACKAGE__);
+        my $view = MyApp::Web::ViewYATT->make_instance(__PACKAGE__);
         no warnings 'redefine';
         *MyApp::Web::create_view = sub { $view }; # Class cache.
         $view
