@@ -1,8 +1,7 @@
-: cascade "include/layout.tx"
+<!yatt:args title counter>
+<yatt:include:layout title>
 
-: override content -> {
-
-<h1 style="padding: 70px; text-align: center; font-size: 80px; line-height: 1; letter-spacing: -2px;">Hello, Amon2 world!</h1>
+<h1 style="padding: 70px; text-align: center; font-size: 80px; line-height: 1; letter-spacing: -2px;">Hello, Amon2 world with YATT::Lite!</h1>
 
 <hr />
 
@@ -41,7 +40,7 @@
             <h2><i class="glyphicon glyphicon-ok"></i> Template Engine</h2>
             <div>
                 Amon2 uses <B>Text::Xslate</B>(Kolon) as a primary template engine.<br />
-                But you can use any template engine easily.
+                But you can use any template engine easily, like this page in <B>YATT::Lite</B>
             </div>
         </div>
     </div>
@@ -85,11 +84,12 @@
 
 <h2>Session counter demo</h2>
 
-<p>You seen this page <: $counter :> times.</p>
+<p>You seen this page &yatt:counter; times.</p>
 
 <form method="post" action="/reset_counter">
     <input type="submit" name="Reset counter." class="btn btn-default">
 </form>
      
 
-: }
+</yatt:include:layout>
+
