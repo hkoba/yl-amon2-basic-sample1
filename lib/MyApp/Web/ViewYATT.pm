@@ -40,7 +40,7 @@ sub make_instance {
 #========================================
 
 Entity context => sub {
-  $Amon2::CONTEXT;
+  MyApp->context();
 };
 
 # Entity uri_with => sub { shift->entity_context->req->uri_with(@_) };
