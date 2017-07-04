@@ -11,7 +11,7 @@ use MyApp;
 use URI::Escape;
 use File::Path ();
 
-use MyApp::Web::ViewYATT;
+use MyApp::Web::View;
 
 my $app = builder {
     enable 'Plack::Middleware::Static',
@@ -25,7 +25,7 @@ my $app = builder {
     MyApp::Web->to_app();
 };
 
-return MyApp::Web->create_view if MyApp::Web::ViewYATT->want_object;
+return MyApp::Web->create_view if MyApp::Web::View->want_object;
 
 unless (caller) {
     my $port        = 5000;

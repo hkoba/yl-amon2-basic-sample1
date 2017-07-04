@@ -1,4 +1,4 @@
-package MyApp::Web::ViewYATT;
+package MyApp::Web::View;
 use strict;
 use warnings;
 use utf8;
@@ -14,7 +14,7 @@ use MyApp::Web::ViewFunctions ();
 # setup view class
 sub make_instance {
     my ($class, $context) = @_;
-    Carp::croak("Usage: MyApp::Web::ViewYATT->make_instance(\$context_class)") if @_!=2;
+    Carp::croak("Usage: MyApp::Web::View->make_instance(\$context_class)") if @_!=2;
 
     my $view_conf = $context->config->{'YATT::Lite'} || +{};
     unless (exists $view_conf->{doc_root}) {
@@ -33,7 +33,7 @@ sub make_instance {
         }
     }
     # MyApp is used in Amon2, so YATT::Lite should move to safe namespace.
-    my $view = MY->new(app_ns => 'MyAppYATT', %$view_conf);
+    my $view = MY->new(app_ns => join("::", __PACKAGE__, 'YATT'), %$view_conf);
     return $view;
 }
 
