@@ -39,15 +39,9 @@ sub make_instance {
 
 #========================================
 
-Entity context => sub {
-  MyApp->context();
-};
-
-# Entity uri_with => sub { shift->entity_context->req->uri_with(@_) };
-# Entity uri_for => sub { shift->entity_context->uri_for(@_) };
-# Entity static_file => sub {shift; MyApp::Web::ViewFunctions::static_file(@_)};
-Entity uri_with => sub { shift; MyApp->context()->req->uri_with(@_) };
-Entity uri_for => sub { shift; MyApp->context()->uri_for(@_) };
-Entity static_file => sub {shift; MyApp::Web::ViewFunctions::static_file(@_)};
+for my $func_name ( @MyApp::Web::ViewFunctions::EXPORT ) {
+    my $sub = MyApp::Web::ViewFunctions->can($func_name);
+    Entity $func_name => sub { shift; $sub->(@_); };
+}
 
 1;
