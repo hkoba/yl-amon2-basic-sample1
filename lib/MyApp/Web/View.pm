@@ -1,4 +1,4 @@
-package MyApp::Web::ViewYATT;
+package MyApp::Web::View;
 use strict;
 use warnings;
 use utf8;
@@ -14,7 +14,7 @@ use MyApp::Web::ViewFunctions ();
 # setup view class
 sub make_instance {
     my ($class, $context) = @_;
-    Carp::croak("Usage: MyApp::Web::ViewYATT->make_instance(\$context_class)") if @_!=2;
+    Carp::croak("Usage: MyApp::Web::View->make_instance(\$context_class)") if @_!=2;
 
     my $view_conf = $context->config->{'YATT::Lite'} || +{};
     unless (exists $view_conf->{doc_root}) {
@@ -33,21 +33,15 @@ sub make_instance {
         }
     }
     # MyApp is used in Amon2, so YATT::Lite should move to safe namespace.
-    my $view = MY->new(app_ns => 'MyAppYATT', %$view_conf);
+    my $view = MY->new(app_ns => join("::", __PACKAGE__, 'YATT'), %$view_conf);
     return $view;
 }
 
 #========================================
 
-Entity context => sub {
-  MyApp->context();
-};
-
-# Entity uri_with => sub { shift->entity_context->req->uri_with(@_) };
-# Entity uri_for => sub { shift->entity_context->uri_for(@_) };
-# Entity static_file => sub {shift; MyApp::Web::ViewFunctions::static_file(@_)};
-Entity uri_with => sub { shift; MyApp->context()->req->uri_with(@_) };
-Entity uri_for => sub { shift; MyApp->context()->uri_for(@_) };
-Entity static_file => sub {shift; MyApp::Web::ViewFunctions::static_file(@_)};
+for my $func_name ( @MyApp::Web::ViewFunctions::EXPORT ) {
+    my $sub = MyApp::Web::ViewFunctions->can($func_name);
+    Entity $func_name => sub { shift; $sub->(@_); };
+}
 
 1;
